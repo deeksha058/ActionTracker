@@ -21,3 +21,27 @@ IDAUDITTABLE  | IDOFPRIMARY    OPERATION
 2 | 1 | GET
 3 | 1 | PATCH
 4 | 1 | DE
+
+// 7th feb 2023.............................
+
+
+// kisme changes perform hue the and kya action perform hue the....
+
+Primary
+// delete//get/post the entry
+
+put
+Secondary
+
+// loging of that delete//get//post entry
+put
+
+Third //
+put/patch --- > name - shubham --jindal changes diff
+// skip the entry for loging of that delete/get/post entry
+
+
+// OOPs........
+
+// excel sheet wala task ....
+// ek excel sheet se data read karnege then uske main koi perticular data kisi  aur excel sheet main daal dege.........

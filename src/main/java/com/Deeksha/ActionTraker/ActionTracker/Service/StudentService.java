@@ -20,7 +20,7 @@ public class StudentService {
     private ActionTrackerRepository actionTrackerRepository;
 
     public List<Student> getAllData() {
-        List<Student> students = studentRepository.findAll();
+        List<Student> students = studentRepository.studentData(1000 ,0);
         for(Student it: students){
             Student student1 = it;
             ActionTracker actionTracker = new ActionTracker();
@@ -53,7 +53,7 @@ public class StudentService {
         ActionTracker actionTracker = new ActionTracker();
         actionTracker.setStudentId(id);
         actionTracker.setMethodName("update");
-        actionTrackerRepository.save(actionTracker);
+        actionTrackerRepository.save(actionTracker); // object mapper , rejex
         studentData.setName(student.getName());
         studentData.setFName(student.getFName());
         studentData.setMName(student.getMName());
