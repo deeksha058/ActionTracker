@@ -1,0 +1,23 @@
+// 5 fev ------->
+
+// CURD
+CREATE —POST
+UPDATE -PUT /PATCH
+READ - GET
+DELETE - DELETE
+
+Primary Table
+ID, Name, FName, MName , Email, createdAt, UpdatedAt
+
+1   D		S	R	D1@G	CURR	CURRT ——
+
+
+
+SlaveTable / AUDIT TABLE
+
+IDAUDITTABLE  | IDOFPRIMARY    OPERATION
+1 |  1 | CREATE
+
+2 | 1 | GET
+3 | 1 | PATCH
+4 | 1 | DE
