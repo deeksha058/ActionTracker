@@ -4,9 +4,11 @@ import com.Deeksha.ActionTraker.ActionTracker.Entity.ActionTracker;
 import com.Deeksha.ActionTraker.ActionTracker.Entity.Student;
 import com.Deeksha.ActionTraker.ActionTracker.Repository.ActionTrackerRepository;
 import com.Deeksha.ActionTraker.ActionTracker.Repository.StudentRepository;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -43,20 +45,20 @@ public class StudentService {
     }
 
     public void deleteStudentData(Integer id) {
-        String methodName = "Delete";
-        addActionTracker(id , methodName);
-        studentRepository.deleteById(id);
+        Student studentData = studentRepository.findById(id).orElse(null);
+        if (studentData != null) {
+            String methodName = "Delete";
+            addActionTracker(id, methodName);
+            studentRepository.deleteById(id);
+        }
     }
 
-    public void updateStudentData( Student student ,Integer id ) {
+    public void updateStudentData(Student student ,Integer id ) throws IOException {
 
-        Student studentData = studentRepository.findById(id).get();
-        String methodName = "update";
-        addActionTracker(id , methodName);
-        studentData.setName(student.getName());
-        studentData.setFName(student.getFName());
-        studentData.setMName(student.getMName());
-        studentData.setEmail(student.getEmail());
+        ObjectMapper mapper = new ObjectMapper();
+        String jsonString = mapper.writeValueAsString(student);
+        Student studentData = mapper.readValue(jsonString , Student.class);
+        studentData.setId(id);
         studentRepository.save(studentData);
 
     }
