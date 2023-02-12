@@ -1,14 +1,18 @@
 package com.Deeksha.ActionTraker.ActionTracker.Service;
 
 import com.Deeksha.ActionTraker.ActionTracker.Entity.ActionTracker;
+import com.Deeksha.ActionTraker.ActionTracker.Entity.Changes;
 import com.Deeksha.ActionTraker.ActionTracker.Entity.Student;
+import com.Deeksha.ActionTraker.ActionTracker.Entity.UpdationChecker;
 import com.Deeksha.ActionTraker.ActionTracker.Repository.ActionTrackerRepository;
 import com.Deeksha.ActionTraker.ActionTracker.Repository.StudentRepository;
+import com.Deeksha.ActionTraker.ActionTracker.Repository.UpdationCheckerRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,16 +20,20 @@ import java.util.Optional;
 public class StudentService {
 
     @Autowired
+    private UpdationCheckerRepository updationCheckerRepository;
+
+    @Autowired
     private StudentRepository studentRepository;
 
     @Autowired
     private ActionTrackerRepository actionTrackerRepository;
 
-    public void addActionTracker(int student_id , String methodName){
+    public ActionTracker addActionTracker(int student_id , String methodName){
         ActionTracker actionTracker = new ActionTracker();
         actionTracker.setStudentId(student_id);
         actionTracker.setMethodName(methodName);
-        actionTrackerRepository.save(actionTracker);
+        ActionTracker tracker = actionTrackerRepository.save(actionTracker);
+        return tracker;
     }
 
     public List<Student> getAllData() {
@@ -45,27 +53,44 @@ public class StudentService {
     }
 
     public void deleteStudentData(Integer id) {
-        Student studentData = studentRepository.findById(id).orElse(null);
-        if (studentData != null) {
+        try{
+            Student studentData = studentRepository.findById(id).orElseThrow();
             String methodName = "Delete";
             addActionTracker(id, methodName);
             studentRepository.deleteById(id);
+
+        }catch (Exception e){
+            System.out.println("Student not found");
         }
     }
 
-    public void updateStudentData(Student student ,Integer id ) throws IOException {
+    public void updateStudentData(Student student ,Integer id ) {
 
-        ObjectMapper mapper = new ObjectMapper();
-        String jsonString = mapper.writeValueAsString(student);
-        Student studentData = mapper.readValue(jsonString , Student.class);
-        studentData.setId(id);
-        studentRepository.save(studentData);
+        try {
+            Student s = studentRepository.findById(id).orElseThrow();
+            String methodName = "update";
+            ActionTracker actionTracker = addActionTracker(id, methodName);
 
+            ObjectMapper mapper = new ObjectMapper();
+            String jsonString = mapper.writeValueAsString(student);
+            Student studentData = mapper.readValue(jsonString, Student.class);
+            studentData.setId(id);
+            studentRepository.save(studentData);
+
+        } catch (Exception e) {
+            System.out.println("Student not found in database " + e);
+        }
     }
 
-    public Optional<Student> getDataById(Integer id) {
-        String methodName = "Get";
-        addActionTracker(id, methodName);
-        return studentRepository.findById(id);
+    public Student getDataById(Integer id) {
+        try {
+            Student student = studentRepository.findById(id).orElseThrow();
+            String methodName = "Get";
+            addActionTracker(id, methodName);
+            return student;
+        }catch (Exception e){
+            System.out.println("Student not found");
+        }
+
     }
 }
