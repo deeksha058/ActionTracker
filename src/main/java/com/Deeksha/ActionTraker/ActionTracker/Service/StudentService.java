@@ -1,9 +1,7 @@
 package com.Deeksha.ActionTraker.ActionTracker.Service;
 
 import com.Deeksha.ActionTraker.ActionTracker.Entity.ActionTracker;
-import com.Deeksha.ActionTraker.ActionTracker.Entity.Changes;
 import com.Deeksha.ActionTraker.ActionTracker.Entity.Student;
-import com.Deeksha.ActionTraker.ActionTracker.Entity.UpdationChecker;
 import com.Deeksha.ActionTraker.ActionTracker.Repository.ActionTrackerRepository;
 import com.Deeksha.ActionTraker.ActionTracker.Repository.StudentRepository;
 import com.Deeksha.ActionTraker.ActionTracker.Repository.UpdationCheckerRepository;
@@ -11,10 +9,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class StudentService {
@@ -88,9 +83,9 @@ public class StudentService {
             String methodName = "Get";
             addActionTracker(id, methodName);
             return student;
-        }catch (Exception e){
+        }catch (Exception e) {
             System.out.println("Student not found");
+            return null;
         }
-
     }
 }
