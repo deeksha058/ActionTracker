@@ -6,6 +6,7 @@ import com.Deeksha.ActionTraker.ActionTracker.Service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,7 +31,7 @@ public class StudentController {
     }
 
     @GetMapping("/g/{id}")
-    public Optional<Student> getDataById(@PathVariable("id") Integer id){
+    public Student getDataById(@PathVariable("id") Integer id){
         return studentService.getDataById(id);
     }
 
@@ -41,13 +42,13 @@ public class StudentController {
     }
 
     @DeleteMapping("/d/{id}")
-    public String deleteStudentData(@PathVariable("id") Integer id){
+    public String deleteStudentData(@PathVariable("id") Integer id) {
         studentService.deleteStudentData(id);
         return "data Deleted Successfully!";
     }
 
     @PutMapping("/u/{id}")
-    public String updateStudentData(@RequestBody Student student ,@PathVariable("id") Integer id ){
+    public String updateStudentData(@RequestBody Student student ,@PathVariable("id") Integer id ) throws IOException {
         studentService.updateStudentData(student ,id);
         return "Data Updated Successfully!";
     }

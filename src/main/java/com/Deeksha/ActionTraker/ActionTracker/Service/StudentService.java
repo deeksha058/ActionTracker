@@ -2,6 +2,7 @@ package com.Deeksha.ActionTraker.ActionTracker.Service;
 
 import com.Deeksha.ActionTraker.ActionTracker.Entity.ActionTracker;
 import com.Deeksha.ActionTraker.ActionTracker.Entity.Student;
+import com.Deeksha.ActionTraker.ActionTracker.Entity.UpdationChecker;
 import com.Deeksha.ActionTraker.ActionTracker.Repository.ActionTrackerRepository;
 import com.Deeksha.ActionTraker.ActionTracker.Repository.StudentRepository;
 import com.Deeksha.ActionTraker.ActionTracker.Repository.UpdationCheckerRepository;
@@ -29,6 +30,16 @@ public class StudentService {
         actionTracker.setMethodName(methodName);
         ActionTracker tracker = actionTrackerRepository.save(actionTracker);
         return tracker;
+    }
+
+    public void trackOfUpdatedData(int action_id , String prev ,String update){
+
+        UpdationChecker updationChecker = new UpdationChecker();
+        updationChecker.setActionTrackerId(action_id);
+        updationChecker.setPrevious_data(prev);
+        updationChecker.setUpdated_data(update);
+        updationCheckerRepository.save(updationChecker);
+
     }
 
     public List<Student> getAllData() {
@@ -66,10 +77,24 @@ public class StudentService {
             String methodName = "update";
             ActionTracker actionTracker = addActionTracker(id, methodName);
 
+            // updating data using object mapper
+
             ObjectMapper mapper = new ObjectMapper();
             String jsonString = mapper.writeValueAsString(student);
             Student studentData = mapper.readValue(jsonString, Student.class);
             studentData.setId(id);
+
+            // Tracking updation of data
+            trackOfUpdatedData(actionTracker.getId() , s.getUpdatedAt().toString() , studentData.getUpdatedAt().toString());
+            if(s.getName() != studentData.getName()){
+                trackOfUpdatedData(actionTracker.getId() , s.getName() , studentData.getName());
+            }
+            if(s.getMName() != studentData.getMName()){
+                trackOfUpdatedData(actionTracker.getId() , s.getMName() , studentData.getMName());
+            }
+            if(s.getFName() != studentData.getFName()){
+                trackOfUpdatedData(actionTracker.getId() , s.getFName() , studentData.getFName());
+            }
             studentRepository.save(studentData);
 
         } catch (Exception e) {
